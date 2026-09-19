@@ -6,6 +6,7 @@ import com.mistbound.relics.combat.Hitbox
 import com.mistbound.relics.combat.clamp
 import com.mistbound.relics.events.GameEvent
 import com.mistbound.relics.player.Player
+import com.mistbound.relics.world.Level
 import kotlin.math.abs
 import kotlin.math.sign
 

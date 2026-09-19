@@ -77,8 +77,8 @@ class Assets {
     fun drawFrame(batch: SpriteBatch, name: String, x: Float, y: Float, flip: Boolean, alpha: Float = 1f, scale: Float = 1f) {
         val s = sprites[name] ?: return
         val (nx, ny) = pivots[name] ?: Pair(0.5f, 1f)
-        val w = s.region.regionWidth * scale
-        val h = s.region.regionHeight * scale
+        val w = s.regionWidth * scale
+        val h = s.regionHeight * scale
         val sx = x - (if (flip) (1f - nx) else nx) * w
         val sy = y - ny * h
         s.setFlip(flip, false)

@@ -282,6 +282,7 @@ class GameScreen : Screen {
     }
 
     private fun drawLevel() {
+        val half = Config.VIRTUAL_WIDTH / 2f
         for (s in level.solids) {
             if (s.x + s.w < viewport.camera.position.x - half - 8f || s.x > viewport.camera.position.x + half + 8f) continue
             shapes.color = Color(0.12f, 0.13f, 0.24f, 1f)
