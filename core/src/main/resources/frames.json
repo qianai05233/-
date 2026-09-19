@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "virtualResolution": [480, 270],
+    "defaultFps": 12,
+    "note": "P0 占位 schema；P1 按 assets/ 各 sheet 逐行校准 bbox/pivot/fps（ENGINEERING 4）"
+  },
+  "sheets": {
+    "protagonist_extras_sheet": {
+      "rows": {
+        "idle": { "fps": 10, "frames": [] },
+        "run": { "fps": 12, "frames": [] },
+        "jump": { "fps": 12, "frames": [] },
+        "roll": { "fps": 14, "frames": [] }
+      }
+    }
+  }
+}

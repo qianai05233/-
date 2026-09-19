@@ -29,9 +29,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build debug APK
+      - name: Run core logic + 60Hz perf tests
         run: |
           chmod +x gradlew
+          ./gradlew :core:test --no-daemon --stacktrace
+
+      - name: Build debug APK
+        run: |
           ./gradlew :android:assembleDebug --no-daemon --stacktrace
 
       - name: Upload debug APK
