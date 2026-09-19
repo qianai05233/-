@@ -26,9 +26,20 @@ class PlayerPhysicsTest {
     private val runRight = InputSnapshot(moveX = 1f)
     private val neutral = InputSnapshot()
 
+    private fun landOnPlatform(): Player {
+        val p = Player(340f, 100f)
+        var steps = 0
+        while (!p.onGround && steps < 120) {
+            p.update(dt, neutral, platformLevel)
+            steps++
+        }
+        assertTrue(p.onGround, "player should land on the platform")
+        return p
+    }
+
     @Test
     fun `coyote time allows jump shortly after leaving ledge`() {
-        val p = Player(380f, 96f)
+        val p = landOnPlatform()
         // 跑下平台边缘
         var steps = 0
         while (p.onGround && steps < 240) {
@@ -44,12 +55,13 @@ class PlayerPhysicsTest {
 
     @Test
     fun `coyote time expires after 0.08s`() {
-        val p = Player(380f, 96f)
+        val p = landOnPlatform()
         var steps = 0
         while (p.onGround && steps < 240) {
             p.update(dt, runRight, platformLevel)
             steps++
         }
+        assertTrue(!p.onGround, "player should have left the platform")
         p.step(7, neutral, platformLevel) // ~0.117s > 0.08s
         p.update(dt, InputSnapshot(jumpPressed = true, jumpHeld = true), platformLevel)
         assertTrue(p.vy <= 0f, "jump must not fire after coyote expiry, vy=${p.vy}")
