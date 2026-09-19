@@ -29,9 +29,47 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build debug APK
+      - name: Run core logic + 60Hz perf tests
         run: |
           chmod +x gradlew
+          ./gradlew :core:test --no-daemon --stacktrace --console=plain 2>&1 | tee /tmp/core-test.log
+          exit ${PIPESTATUS[0]}
+
+      - name: Surface test failures as annotations
+        if: failure()
+        run: |
+          python3 - <<'EOF'
+          import glob, xml.etree.ElementTree as ET
+          found = False
+          for p in glob.glob('**/test-results/**/*.xml', recursive=True):
+              r = ET.parse(p).getroot()
+              for tc in r.iter('testcase'):
+                  for f in list(tc.iter('failure')) + list(tc.iter('error')):
+                      found = True
+                      msg = (f.get('message') or 'test failed').replace('\n', ' ')[:400]
+                      print(f"::error file={tc.get('classname')},title={tc.get('name')}::{msg}")
+          if not found:
+              # 编译/配置失败：抽取关键段落回传
+              try:
+                  lines = open('/tmp/core-test.log', 'rb').read().decode('utf-8', 'replace').splitlines()
+              except OSError:
+                  lines = ['(no log captured)']
+              out = []
+              grab = 0
+              for ln in lines:
+                  s = ln.strip()
+                  if any(k in s for k in ('FAILURE', 'What went wrong', 'Caused by', 'e: ', 'error:', 'Could not', 'Searched in', 'A problem occurred')):
+                      grab = 25
+                  if grab > 0:
+                      out.append(s)
+                      grab -= 1
+              for line in out[:80]:
+                  if line:
+                      print('::error::' + line[:300])
+          EOF
+
+      - name: Build debug APK
+        run: |
           ./gradlew :android:assembleDebug --no-daemon --stacktrace
 
       - name: Upload debug APK
