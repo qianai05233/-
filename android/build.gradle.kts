@@ -1,3 +1,4 @@
+import java.io.File
 import java.util.zip.ZipFile
 
 plugins {
@@ -57,28 +58,30 @@ dependencies {
 // 将 libGDX 原生库从 maven jar 解包到 jniLibs/<abi>/libgdx.so
 val copyNatives by tasks.registering {
     val nativeFiles = natives
-    val outDir = layout.projectDirectory.dir("src/main/jniLibs")
+    val outDir: File = layout.projectDirectory.dir("src/main/jniLibs").asFile
     inputs.files(nativeFiles)
     outputs.dir(outDir)
     doLast {
-        nativeFiles.files.forEach { jar ->
-            val abi = when {
-                jar.name.contains("arm64-v8a") -> "arm64-v8a"
-                jar.name.contains("armeabi-v7a") -> "armeabi-v7a"
+        for (jar in nativeFiles.files) {
+            val name = jar.name
+            val abi: String? = when {
+                name.contains("arm64-v8a") -> "arm64-v8a"
+                name.contains("armeabi-v7a") -> "armeabi-v7a"
                 else -> null
             }
             if (abi != null) {
-                val target = outDir.dir(abi).asFile
+                val target = File(outDir, abi)
                 target.mkdirs()
-                ZipFile(jar).use { zip ->
-                    zip.getEntry("libgdx.so")?.let { entry ->
-                        zip.getInputStream(entry).use { input ->
-                            java.io.File(target, "libgdx.so").outputStream().use { output ->
-                                input.copyTo(output)
-                            }
-                        }
-                    }
+                val zip = ZipFile(jar)
+                val entry = zip.getEntry("libgdx.so")
+                if (entry != null) {
+                    val input = zip.getInputStream(entry)
+                    val output = File(target, "libgdx.so").outputStream()
+                    input.copyTo(output)
+                    output.close()
+                    input.close()
                 }
+                zip.close()
             }
         }
     }
