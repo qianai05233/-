@@ -121,6 +121,8 @@ class TouchControls(private val viewport: PixelPerfectViewport) : InputProcessor
         return true
     }
 
+    override fun keyTyped(character: Char): Boolean = false
+
     private var attackWasHeld = false
 
     override fun poll(): InputSnapshot {
