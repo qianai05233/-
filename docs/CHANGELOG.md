@@ -2,6 +2,13 @@
 
 本文件遵循 ENGINEERING §8：每个 PR 更新。格式：阶段 → 版本 → 内容。
 
+## [0.2.1-p1] APK V2 — Android 启动闪退热修
+
+- 修复 Android 运行时使用 `Gdx.files.classpath("frames.json")` 无法读取动画清单导致的启动闪退。
+- 将 `frames.json` 随 APK 放入 `game/frames.json`，改用 `Gdx.files.internal(...)` 读取。
+- 增加 core 清单与 Android assets 副本一致性单测。
+- versionCode 3 / versionName 0.2.1-p1。
+
 ## [0.2.0-p1] APK V2 — P1 手感 + 真帧 + 音效
 
 ### 素材管线（tools/pipeline/）

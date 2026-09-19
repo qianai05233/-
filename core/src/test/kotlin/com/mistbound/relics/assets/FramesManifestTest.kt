@@ -62,6 +62,20 @@ class FramesManifestTest {
     }
 
     @Test
+    fun `android runtime copy matches core manifest`() {
+        val core = readText(
+            "../core/src/main/resources/frames.json",
+            "core/src/main/resources/frames.json",
+            "src/main/resources/frames.json",
+        )
+        val android = readText(
+            "../android/assets/game/frames.json",
+            "android/assets/game/frames.json",
+        )
+        assertEquals(core, android, "Android assets 中的 frames.json 必须与 core 清单一致")
+    }
+
+    @Test
     fun `core anims exist`() {
         val m = manifest()
         for (id in listOf(

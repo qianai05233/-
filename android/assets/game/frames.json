@@ -1,0 +1,287 @@
+{
+ "meta": {
+  "version": 2,
+  "virtualResolution": [
+   480,
+   270
+  ],
+  "atlasManifest": "game/atlas/pack.json",
+  "note": "由 tools/pipeline/sprite_pipeline.py 生成 + sheet_defs.json 人工校准"
+ },
+ "anims": {
+  "hero_idle": {
+   "sheet": "hero",
+   "frames": [
+    "hero_awaken_idle_0",
+    "hero_awaken_idle_1",
+    "hero_awaken_idle_2",
+    "hero_awaken_idle_3",
+    "hero_awaken_idle_4"
+   ],
+   "fps": 5,
+   "loop": true,
+   "pivot": [
+    0.491,
+    1.0
+   ]
+  },
+  "hero_run": {
+   "sheet": "hero",
+   "frames": [
+    "hero_awaken_idle_0",
+    "hero_awaken_idle_1",
+    "hero_awaken_idle_2",
+    "hero_awaken_idle_3",
+    "hero_awaken_idle_4"
+   ],
+   "fps": 13,
+   "loop": true,
+   "pivot": [
+    0.491,
+    1.0
+   ]
+  },
+  "hero_roll": {
+   "sheet": "hero",
+   "frames": [
+    "hero_roll_0",
+    "hero_roll_1",
+    "hero_roll_2",
+    "hero_roll_3",
+    "hero_roll_4",
+    "hero_roll_5",
+    "hero_roll_6"
+   ],
+   "fps": 24,
+   "loop": false,
+   "pivot": [
+    0.503,
+    1.0
+   ]
+  },
+  "hero_air": {
+   "sheet": "hero",
+   "frames": [
+    "hero_idle_base_0"
+   ],
+   "fps": 5,
+   "loop": true,
+   "pivot": [
+    0.519,
+    1.0
+   ]
+  },
+  "hero_attack1": {
+   "sheet": "hero",
+   "frames": [
+    "hero_poses_2"
+   ],
+   "fps": 10,
+   "loop": false,
+   "pivot": [
+    0.445,
+    1.0
+   ]
+  },
+  "hero_attack2": {
+   "sheet": "hero",
+   "frames": [
+    "hero_awaken_atk_0",
+    "hero_awaken_atk_2"
+   ],
+   "fps": 18,
+   "loop": false,
+   "pivot": [
+    0.537,
+    1.0
+   ]
+  },
+  "hero_attack3": {
+   "sheet": "hero",
+   "frames": [
+    "hero_awaken_atk_1",
+    "hero_awaken_atk_3"
+   ],
+   "fps": 16,
+   "loop": false,
+   "pivot": [
+    0.504,
+    1.0
+   ]
+  },
+  "hero_charge_atk": {
+   "sheet": "hero",
+   "frames": [
+    "hero_poses_3",
+    "hero_poses_4"
+   ],
+   "fps": 8,
+   "loop": true,
+   "pivot": [
+    0.372,
+    1.0
+   ]
+  },
+  "hero_hurt": {
+   "sheet": "hero",
+   "frames": [
+    "hero_death_0"
+   ],
+   "fps": 6,
+   "loop": false,
+   "pivot": [
+    0.567,
+    1.0
+   ]
+  },
+  "hero_death": {
+   "sheet": "hero",
+   "frames": [
+    "hero_death_0",
+    "hero_death_1",
+    "hero_death_2",
+    "hero_death_3"
+   ],
+   "fps": 6,
+   "loop": false,
+   "pivot": [
+    0.58,
+    1.0
+   ]
+  },
+  "hero_win": {
+   "sheet": "hero",
+   "frames": [
+    "hero_poses_1",
+    "hero_poses_0"
+   ],
+   "fps": 3,
+   "loop": true,
+   "pivot": [
+    0.512,
+    1.0
+   ]
+  },
+  "wraith_idle": {
+   "sheet": "wraith",
+   "frames": [
+    "wraith_idle_0",
+    "wraith_idle_1"
+   ],
+   "fps": 6,
+   "loop": true,
+   "pivot": [
+    0.433,
+    0.75
+   ]
+  },
+  "wraith_hurt": {
+   "sheet": "wraith",
+   "frames": [
+    "wraith_hurt_0"
+   ],
+   "fps": 8,
+   "loop": false,
+   "pivot": [
+    0.352,
+    0.692
+   ]
+  },
+  "wraith_die": {
+   "sheet": "wraith",
+   "frames": [
+    "wraith_die_0"
+   ],
+   "fps": 8,
+   "loop": false,
+   "pivot": [
+    0.514,
+    1.0
+   ]
+  },
+  "vfx_slash_s": {
+   "sheet": "vfx",
+   "frames": [
+    "vfx_slash_s_0"
+   ],
+   "fps": 12,
+   "loop": false,
+   "pivot": [
+    0.567,
+    1.0
+   ]
+  },
+  "vfx_slash_m": {
+   "sheet": "vfx",
+   "frames": [
+    "vfx_slash_m_0"
+   ],
+   "fps": 12,
+   "loop": false,
+   "pivot": [
+    0.576,
+    1.0
+   ]
+  },
+  "vfx_slash_b": {
+   "sheet": "vfx",
+   "frames": [
+    "vfx_slash_b_0"
+   ],
+   "fps": 12,
+   "loop": false,
+   "pivot": [
+    0.603,
+    1.0
+   ]
+  },
+  "vfx_hit_star": {
+   "sheet": "vfx",
+   "frames": [
+    "vfx_hit_star_0"
+   ],
+   "fps": 12,
+   "loop": false,
+   "pivot": [
+    0.674,
+    0.714
+   ]
+  },
+  "vfx_dash": {
+   "sheet": "vfx",
+   "frames": [
+    "vfx_dash_0"
+   ],
+   "fps": 12,
+   "loop": false,
+   "pivot": [
+    0.614,
+    1.0
+   ]
+  },
+  "vfx_shards": {
+   "sheet": "vfx",
+   "frames": [
+    "vfx_shards_0"
+   ],
+   "fps": 12,
+   "loop": false,
+   "pivot": [
+    0.757,
+    0.917
+   ]
+  },
+  "vfx_blood": {
+   "sheet": "vfx",
+   "frames": [
+    "vfx_blood_0"
+   ],
+   "fps": 12,
+   "loop": false,
+   "pivot": [
+    0.563,
+    0.522
+   ]
+  }
+ }
+}

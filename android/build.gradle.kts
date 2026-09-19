@@ -18,8 +18,8 @@ android {
         applicationId = "com.mistbound.relics"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "0.2.0-p1"
+        versionCode = 3
+        versionName = "0.2.1-p1"
     }
 
     buildTypes {
