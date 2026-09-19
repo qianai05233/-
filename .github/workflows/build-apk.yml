@@ -32,7 +32,8 @@ jobs:
       - name: Run core logic + 60Hz perf tests
         run: |
           chmod +x gradlew
-          ./gradlew :core:test --no-daemon --stacktrace
+          ./gradlew :core:test --no-daemon --stacktrace --console=plain 2>&1 | tee /tmp/core-test.log
+          exit ${PIPESTATUS[0]}
 
       - name: Surface test failures as annotations
         if: failure()
@@ -48,7 +49,15 @@ jobs:
                       msg = (f.get('message') or 'test failed').replace('\n', ' ')[:400]
                       print(f"::error file={tc.get('classname')},title={tc.get('name')}::{msg}")
           if not found:
-              print('::error::step failed but no test-result XML found (compile/config failure)')
+              # 编译/配置失败：回传 gradle 日志尾部
+              try:
+                  tail = open('/tmp/core-test.log', 'rb').read()[-5000:].decode('utf-8', 'replace')
+              except OSError:
+                  tail = '(no log captured)'
+              for line in tail.splitlines():
+                  line = line.strip()
+                  if line:
+                      print('::error::' + line[:300])
           EOF
 
       - name: Build debug APK
