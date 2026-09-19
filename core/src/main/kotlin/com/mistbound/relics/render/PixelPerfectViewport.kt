@@ -45,10 +45,4 @@ class PixelPerfectViewport(
     fun toWorldX(screenX: Float): Float = (screenX - left) / scale
 
     fun toWorldY(screenY: Float, screenHeight: Float): Float = ((screenHeight - screenY) - bottom) / scale
-
-    fun contains(screenX: Float, screenHeight: Float): Boolean {
-        val wx = toWorldX(screenX)
-        val wy = toWorldY(screenY, screenHeight)
-        return wx in 0f..worldWidth && wy in 0f..worldHeight
-    }
 }
