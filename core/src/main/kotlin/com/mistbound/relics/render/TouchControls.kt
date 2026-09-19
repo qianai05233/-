@@ -13,7 +13,7 @@ import kotlin.math.abs
 /**
  * 触屏输入：左半屏虚拟摇杆 + 右侧五键（攻击/跳跃/翻滚/Q/E，GDD 7）。
  * 布局参考 docs/reference/02_scene_hud_spec.md 右下技能槽位置。
- * P0 用半透明几何图形占位绘制，P2 换 ui_hud_kit.png 图集。
+ * P1 仍为几何占位绘制，P2 换 ui_hud_kit.png 图集。
  */
 class TouchControls(private val viewport: PixelPerfectViewport) : InputProcessor, InputSource {
 
@@ -42,6 +42,7 @@ class TouchControls(private val viewport: PixelPerfectViewport) : InputProcessor
     private var keyLeft = false
     private var keyRight = false
     private var keyJumpHeld = false
+    private var keyAttackHeld = false
 
     private fun screenH(): Float = Gdx.graphics.backBufferHeight.toFloat()
 
@@ -98,7 +99,10 @@ class TouchControls(private val viewport: PixelPerfectViewport) : InputProcessor
                 keyJumpHeld = true
             }
             Keys.Z, Keys.SHIFT_LEFT -> pressed.add("ROLL")
-            Keys.X, Keys.CONTROL_LEFT -> pressed.add("ATTACK")
+            Keys.X, Keys.CONTROL_LEFT -> {
+                if (!keyAttackHeld) pressed.add("ATTACK")
+                keyAttackHeld = true
+            }
             Keys.C -> pressed.add("Q")
             Keys.V -> pressed.add("E")
             else -> return false
@@ -111,6 +115,7 @@ class TouchControls(private val viewport: PixelPerfectViewport) : InputProcessor
             Keys.LEFT, Keys.A -> keyLeft = false
             Keys.RIGHT, Keys.D -> keyRight = false
             Keys.SPACE -> keyJumpHeld = false
+            Keys.X, Keys.CONTROL_LEFT -> keyAttackHeld = false
             else -> return false
         }
         return true
@@ -118,21 +123,27 @@ class TouchControls(private val viewport: PixelPerfectViewport) : InputProcessor
 
     override fun keyTyped(character: Char): Boolean = false
 
+    private var attackWasHeld = false
+
     override fun poll(): InputSnapshot {
         var moveX = joyX
         if (keyLeft) moveX -= 1f
         if (keyRight) moveX += 1f
         moveX = moveX.coerceIn(-1f, 1f)
 
+        val attackHeld = held.contains("ATTACK") || keyAttackHeld
         val snap = InputSnapshot(
             moveX = moveX,
             jumpHeld = held.contains("JUMP") || keyJumpHeld,
             jumpPressed = pressed.contains("JUMP"),
             rollPressed = pressed.contains("ROLL"),
             attackPressed = pressed.contains("ATTACK"),
+            attackHeld = attackHeld,
+            attackReleased = attackWasHeld && !attackHeld,
             skillQPressed = pressed.contains("Q"),
             skillEPressed = pressed.contains("E"),
         )
+        attackWasHeld = attackHeld
         pressed.clear()
         return snap
     }

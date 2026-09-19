@@ -1,0 +1,543 @@
+{
+  "_comment": "P1 素材管线配置：帧表网格 = 自动测量(投影分割) + 逐行人工校准(显式单元格分组)。fps/loop 为 frames.json 动画定义。",
+  "bgHex": "#0D1220",
+  "sheets": [
+    {
+      "id": "hero",
+      "file": "protagonist_extras_sheet.png",
+      "tol": 24,
+      "colGap": 10,
+      "rowGap": 10,
+      "mergeRadius": 10,
+      "minSize": 6,
+      "worldTargetHeight": 30,
+      "anchorRow": "awaken_idle",
+      "face": "right",
+      "flash": true,
+      "rows": [
+        {
+          "name": "idle_base",
+          "cells": [
+            [
+              0
+            ]
+          ],
+          "fps": 5,
+          "loop": true
+        },
+        {
+          "name": "roll",
+          "cells": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ],
+            [
+              4
+            ],
+            [
+              5
+            ],
+            [
+              6
+            ],
+            [
+              7
+            ]
+          ],
+          "fps": 24,
+          "loop": false
+        },
+        {
+          "name": "poses",
+          "cells": [
+            [
+              8
+            ],
+            [
+              9
+            ],
+            [
+              10
+            ],
+            [
+              11
+            ],
+            [
+              12
+            ],
+            [
+              13
+            ]
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        {
+          "name": "death",
+          "cells": [
+            [
+              14
+            ],
+            [
+              15
+            ],
+            [
+              16
+            ],
+            [
+              17
+            ]
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        {
+          "name": "death_vfx",
+          "cells": [
+            [
+              18
+            ],
+            [
+              19
+            ],
+            [
+              20
+            ]
+          ],
+          "fps": 10,
+          "loop": false
+        },
+        {
+          "name": "altar",
+          "cells": [
+            [
+              21
+            ],
+            [
+              22
+            ],
+            [
+              23
+            ],
+            [
+              24
+            ],
+            [
+              25
+            ],
+            [
+              26
+            ]
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        {
+          "name": "awaken_idle",
+          "cells": [
+            [
+              28
+            ],
+            [
+              29
+            ],
+            [
+              30
+            ],
+            [
+              31
+            ],
+            [
+              32
+            ]
+          ],
+          "fps": 5,
+          "loop": true
+        },
+        {
+          "name": "awaken_atk",
+          "cells": [
+            [
+              33
+            ],
+            [
+              34
+            ],
+            [
+              35
+            ],
+            [
+              36
+            ],
+            [
+              37
+            ]
+          ],
+          "fps": 12,
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "wraith",
+      "file": "enemies_f1_wraith_flame_sheet.png",
+      "tol": 24,
+      "colGap": 8,
+      "rowGap": 10,
+      "mergeRadius": 12,
+      "minSize": 6,
+      "worldTargetHeight": 26,
+      "anchorRow": "idle",
+      "face": "left",
+      "flash": true,
+      "rows": [
+        {
+          "name": "idle",
+          "cells": [
+            [
+              0
+            ],
+            [
+              1
+            ]
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        {
+          "name": "hurt",
+          "cells": [
+            [
+              2
+            ]
+          ],
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "die",
+          "cells": [
+            [
+              3
+            ]
+          ],
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "flame_idle",
+          "cells": [
+            [
+              4
+            ],
+            [
+              5
+            ]
+          ],
+          "fps": 7,
+          "loop": true
+        },
+        {
+          "name": "flame_burst",
+          "cells": [
+            [
+              6
+            ]
+          ],
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "flame_die",
+          "cells": [
+            [
+              7,
+              8
+            ]
+          ],
+          "fps": 8,
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "vfx",
+      "file": "effects_vfx_sheet.png",
+      "fixedGrid": [
+        4,
+        3
+      ],
+      "gridInset": 12,
+      "tol": 55,
+      "colGap": 8,
+      "rowGap": 8,
+      "mergeRadius": 10,
+      "minSize": 5,
+      "worldScale": 0.12,
+      "face": "right",
+      "flash": false,
+      "subRegions": [
+        {
+          "name": "slash_s",
+          "panel": [
+            0,
+            0
+          ],
+          "pick": 0
+        },
+        {
+          "name": "slash_m",
+          "panel": [
+            1,
+            0
+          ],
+          "pick": 0
+        },
+        {
+          "name": "slash_b",
+          "panel": [
+            2,
+            0
+          ],
+          "pick": 0
+        },
+        {
+          "name": "hit_star",
+          "panel": [
+            3,
+            0
+          ],
+          "pick": 0
+        },
+        {
+          "name": "summon_circle",
+          "panel": [
+            0,
+            1
+          ],
+          "pick": 0
+        },
+        {
+          "name": "ring",
+          "panel": [
+            1,
+            1
+          ],
+          "pick": 0
+        },
+        {
+          "name": "dash",
+          "panel": [
+            2,
+            1
+          ],
+          "pick": 0
+        },
+        {
+          "name": "shards",
+          "panel": [
+            2,
+            1
+          ],
+          "pick": 1
+        },
+        {
+          "name": "pillars",
+          "panel": [
+            0,
+            2
+          ],
+          "pick": 0
+        },
+        {
+          "name": "blood",
+          "panel": [
+            1,
+            2
+          ],
+          "pick": 0
+        },
+        {
+          "name": "poison",
+          "panel": [
+            2,
+            2
+          ],
+          "pick": 0
+        },
+        {
+          "name": "portal",
+          "panel": [
+            3,
+            2
+          ],
+          "pick": 0
+        }
+      ]
+    }
+  ],
+  "anims": {
+    "hero_idle": {
+      "sheet": "hero",
+      "row": "awaken_idle",
+      "pick": "all",
+      "fps": 5,
+      "loop": true
+    },
+    "hero_run": {
+      "sheet": "hero",
+      "row": "awaken_idle",
+      "pick": "all",
+      "fps": 13,
+      "loop": true
+    },
+    "hero_roll": {
+      "sheet": "hero",
+      "row": "roll",
+      "pick": "all",
+      "fps": 24,
+      "loop": false
+    },
+    "hero_air": {
+      "sheet": "hero",
+      "row": "idle_base",
+      "pick": "all",
+      "fps": 5,
+      "loop": true
+    },
+    "hero_attack1": {
+      "sheet": "hero",
+      "row": "poses",
+      "pick": [
+        2
+      ],
+      "fps": 10,
+      "loop": false
+    },
+    "hero_attack2": {
+      "sheet": "hero",
+      "row": "awaken_atk",
+      "pick": [
+        0,
+        2
+      ],
+      "fps": 18,
+      "loop": false
+    },
+    "hero_attack3": {
+      "sheet": "hero",
+      "row": "awaken_atk",
+      "pick": [
+        1,
+        3
+      ],
+      "fps": 16,
+      "loop": false
+    },
+    "hero_charge_atk": {
+      "sheet": "hero",
+      "row": "poses",
+      "pick": [
+        3,
+        4
+      ],
+      "fps": 8,
+      "loop": true
+    },
+    "hero_hurt": {
+      "sheet": "hero",
+      "row": "death",
+      "pick": [
+        0
+      ],
+      "fps": 6,
+      "loop": false
+    },
+    "hero_death": {
+      "sheet": "hero",
+      "row": "death",
+      "pick": "all",
+      "fps": 6,
+      "loop": false
+    },
+    "hero_win": {
+      "sheet": "hero",
+      "row": "poses",
+      "pick": [
+        1,
+        0
+      ],
+      "fps": 3,
+      "loop": true
+    },
+    "wraith_idle": {
+      "sheet": "wraith",
+      "row": "idle",
+      "pick": "all",
+      "fps": 6,
+      "loop": true
+    },
+    "wraith_hurt": {
+      "sheet": "wraith",
+      "row": "hurt",
+      "pick": "all",
+      "fps": 8,
+      "loop": false
+    },
+    "wraith_die": {
+      "sheet": "wraith",
+      "row": "die",
+      "pick": "all",
+      "fps": 8,
+      "loop": false
+    },
+    "vfx_slash_s": {
+      "sheet": "vfx",
+      "sub": "slash_s",
+      "fps": 12,
+      "loop": false
+    },
+    "vfx_slash_m": {
+      "sheet": "vfx",
+      "sub": "slash_m",
+      "fps": 12,
+      "loop": false
+    },
+    "vfx_slash_b": {
+      "sheet": "vfx",
+      "sub": "slash_b",
+      "fps": 12,
+      "loop": false
+    },
+    "vfx_hit_star": {
+      "sheet": "vfx",
+      "sub": "hit_star",
+      "fps": 12,
+      "loop": false
+    },
+    "vfx_dash": {
+      "sheet": "vfx",
+      "sub": "dash",
+      "fps": 12,
+      "loop": false
+    },
+    "vfx_shards": {
+      "sheet": "vfx",
+      "sub": "shards",
+      "fps": 12,
+      "loop": false
+    },
+    "vfx_blood": {
+      "sheet": "vfx",
+      "sub": "blood",
+      "fps": 12,
+      "loop": false
+    }
+  }
+}
