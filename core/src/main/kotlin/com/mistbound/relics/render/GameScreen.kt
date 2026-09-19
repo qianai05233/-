@@ -27,6 +27,10 @@ class GameScreen : Screen {
     private val shapes = ShapeRenderer()
     private val batch = SpriteBatch()
     private val font = BitmapFont()
+    private val hudCamera = com.badlogic.gdx.graphics.OrthographicCamera()
+
+    // 相机跟随 + 前瞻（ENGINEERING 3）
+    private var camX = Config.VIRTUAL_WIDTH / 2f
 
     private val fpsMeter = FpsMeter { fps ->
         Gdx.app.log("MistboundFPS", "fps=$fps stepsLastFrame=${loop.stepsThisFrame}")
@@ -35,6 +39,8 @@ class GameScreen : Screen {
     override fun show() {
         Gdx.input.inputProcessor = controls
         font.data.setScale(0.5f)
+        hudCamera.setToOrtho(false, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT)
+        hudCamera.update()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -47,6 +53,15 @@ class GameScreen : Screen {
             player.update(dt, controls.poll(), level)
         }
         val alpha = loop.alpha
+
+        // 相机：平滑跟随 + 朝向前瞻，钳制到关卡边界
+        val lookAhead = player.facing * 24f
+        val targetX = player.renderX(alpha) + player.width / 2f + lookAhead
+        camX += (targetX - camX) * minOf(1f, delta * 6f)
+        val half = Config.VIRTUAL_WIDTH / 2f
+        camX = camX.coerceIn(half, maxOf(half, level.width - half))
+        viewport.camera.position.set(camX, Config.VIRTUAL_HEIGHT / 2f, 0f)
+        viewport.camera.update()
 
         // 全屏清屏（含 letterbox 黑边）
         Gdx.gl.glViewport(0, 0, Gdx.graphics.backBufferWidth, Gdx.graphics.backBufferHeight)
@@ -76,13 +91,16 @@ class GameScreen : Screen {
             shapes.color = Color(0.54f, 0.71f, 0.97f, 0.7f)
             shapes.circle(px + player.width / 2f + player.facing * 14f, py + 12f, 8f, 16)
         }
+        shapes.end()
 
-        // 触控 UI
+        // 触控 UI 与 HUD 走屏幕空间相机（不随世界移动）
+        shapes.projectionMatrix = hudCamera.combined
+        shapes.begin(ShapeRenderer.ShapeType.Filled)
         controls.draw(shapes)
         shapes.end()
 
         // HUD：FPS 计数（60fps 验证）
-        batch.projectionMatrix = viewport.camera.combined
+        batch.projectionMatrix = hudCamera.combined
         batch.begin()
         font.color = Color.WHITE
         font.draw(batch, "FPS ${fpsMeter.fps}", 4f, Config.VIRTUAL_HEIGHT - 4f)
