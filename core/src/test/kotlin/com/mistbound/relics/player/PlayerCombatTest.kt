@@ -20,9 +20,17 @@ class PlayerCombatTest {
         repeat(steps) { p.update(dt, input, floor) }
     }
 
+    /** 出生帧恰好贴地不重叠（onGround=false），先空走一步落地再动作（与 P0 测试惯例一致）。 */
+    private fun settled(): Player {
+        val p = Player(60f, 40f)
+        tap(p, 1)
+        assertTrue(p.onGround, "settle 后应落地")
+        return p
+    }
+
     @Test
     fun `attack starts and advances through phases`() {
-        val p = Player(60f, 40f)
+        val p = settled()
         p.update(dt, InputSnapshot(attackPressed = true), floor)
         assertEquals(Player.State.ATTACK, p.state)
         assertEquals(0, p.attackCombo)
@@ -34,7 +42,7 @@ class PlayerCombatTest {
 
     @Test
     fun `attack buffers next combo`() {
-        val p = Player(60f, 40f)
+        val p = settled()
         p.update(dt, InputSnapshot(attackPressed = true), floor)
         tap(p, 11) // 0.183s：进入收招段（0.18 后）
         p.update(dt, InputSnapshot(attackPressed = true), floor) // 缓冲下一击
@@ -46,7 +54,7 @@ class PlayerCombatTest {
 
     @Test
     fun `confirmed hit opens roll cancel window`() {
-        val p = Player(60f, 40f)
+        val p = settled()
         p.update(dt, InputSnapshot(attackPressed = true), floor)
         tap(p, 8) // 0.133s：active 中
         p.onAttackConfirmed()
@@ -57,7 +65,7 @@ class PlayerCombatTest {
 
     @Test
     fun `roll cancel not allowed before hit confirmation`() {
-        val p = Player(60f, 40f)
+        val p = settled()
         p.update(dt, InputSnapshot(attackPressed = true), floor)
         tap(p, 2) // 前摇早期，cancelWindow 未开启
         p.update(dt, InputSnapshot(rollPressed = true), floor)
@@ -66,7 +74,7 @@ class PlayerCombatTest {
 
     @Test
     fun `charge flow ready and release`() {
-        val p = Player(60f, 40f)
+        val p = settled()
         p.update(dt, InputSnapshot(attackPressed = true, attackHeld = true), floor)
         tap(p, 12, InputSnapshot(attackHeld = true)) // 进入收招
         assertEquals(Player.State.CHARGE, p.state)
@@ -81,7 +89,7 @@ class PlayerCombatTest {
 
     @Test
     fun `charge cancels into roll`() {
-        val p = Player(60f, 40f)
+        val p = settled()
         p.update(dt, InputSnapshot(attackPressed = true, attackHeld = true), floor)
         tap(p, 12, InputSnapshot(attackHeld = true))
         assertEquals(Player.State.CHARGE, p.state)
@@ -91,8 +99,7 @@ class PlayerCombatTest {
 
     @Test
     fun `hurt applies knockback stun and iframes`() {
-        val p = Player(60f, 40f)
-        p.update(dt, InputSnapshot(), floor)
+        val p = settled()
         val hpBefore = p.hp
         assertTrue(p.hurt(20, fromX = p.cx + 40f))
         assertEquals(hpBefore - 20, p.hp)
@@ -109,8 +116,7 @@ class PlayerCombatTest {
 
     @Test
     fun `death and respawn reset`() {
-        val p = Player(60f, 40f)
-        p.update(dt, InputSnapshot(), floor)
+        val p = settled()
         assertTrue(p.hurt(9999, fromX = p.cx + 10f))
         assertTrue(p.dead)
         assertEquals(Player.State.DEAD, p.state)

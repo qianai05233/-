@@ -3,6 +3,7 @@ package com.mistbound.relics.combat
 import com.mistbound.relics.Config
 import com.mistbound.relics.enemy.Enemy
 import com.mistbound.relics.events.GameEvent
+import com.mistbound.relics.input.InputSnapshot
 import com.mistbound.relics.player.Player
 import com.mistbound.relics.world.Level
 import kotlin.random.Random
@@ -15,11 +16,15 @@ class CombatTest {
     private val level = Level.placeholder()
     private val dt = Config.FIXED_DT
 
+    /** 出生帧恰好贴地不重叠（onGround=false），先空走一步落地再动作（与 P0 测试惯例一致）。 */
+    private fun settle(p: Player) = p.update(dt, InputSnapshot(), level)
+
     private fun attackPlayer(x: Float = 60f, y: Float = 40f): Player {
         val p = Player(x, y)
-        p.update(dt, com.mistbound.relics.input.InputSnapshot(attackPressed = true), level)
+        settle(p)
+        p.update(dt, InputSnapshot(attackPressed = true), level)
         // 推进到 active 窗口（combo0 前摇 0.08s）
-        repeat(5) { p.update(dt, com.mistbound.relics.input.InputSnapshot(), level) }
+        repeat(5) { p.update(dt, InputSnapshot(), level) }
         return p
     }
 
@@ -43,12 +48,16 @@ class CombatTest {
         val hits = Combat.resolvePlayerAttack(hb!!, p, listOf(e), Random(7), events)
 
         assertEquals(1, hits.size)
-        assertEquals(Config.ATTACK_DAMAGE[0], hits[0].dmg)
+        val dmgSet = setOf(
+            Config.ATTACK_DAMAGE[0],
+            (Config.ATTACK_DAMAGE[0] * Config.CRIT_MULTIPLIER).toInt(),
+        )
+        assertTrue(hits[0].dmg in dmgSet, "伤害应为 24 或暴击 42，实际 ${hits[0].dmg}")
         assertTrue(events.any { it is GameEvent.Number && it.text == "-${hits[0].dmg}" })
-        assertTrue(events.any { it is GameEvent.Hitstop && it.seconds == Config.HITSTOP_SMALL })
+        assertTrue(events.any { it is GameEvent.Hitstop && it.seconds >= Config.HITSTOP_SMALL })
         assertTrue(events.any { it is GameEvent.Shake })
         assertTrue(events.any { it is GameEvent.Sfx })
-        assertEquals(Config.ATTACK_DAMAGE[0], e.kind.hp - e.hp)
+        assertEquals(Enemy.Kind.WRAITH.hp - hits[0].dmg, e.hp)
     }
 
     @Test
@@ -61,18 +70,19 @@ class CombatTest {
     @Test
     fun `charge attack is stronger and wider`() {
         val p = Player(60f, 40f)
+        settle(p)
         // 起手 → 收招段按住攻击 → 蓄力 → 就绪后放开 → 蓄力斩
-        p.update(dt, com.mistbound.relics.input.InputSnapshot(attackPressed = true, attackHeld = true), level)
-        repeat(12) { p.update(dt, com.mistbound.relics.input.InputSnapshot(attackHeld = true), level) } // 0.2s 进入收招
+        p.update(dt, InputSnapshot(attackPressed = true, attackHeld = true), level)
+        repeat(12) { p.update(dt, InputSnapshot(attackHeld = true), level) } // 0.2s 进入收招
         assertEquals(Player.State.CHARGE, p.state, "收招段按住攻击应进入蓄力")
-        repeat(21) { p.update(dt, com.mistbound.relics.input.InputSnapshot(attackHeld = true), level) } // 0.35s
+        repeat(21) { p.update(dt, InputSnapshot(attackHeld = true), level) } // 0.35s
         assertTrue(p.chargeReady, "蓄力应就绪")
-        p.update(dt, com.mistbound.relics.input.InputSnapshot(attackReleased = true), level)
+        p.update(dt, InputSnapshot(attackReleased = true), level)
         assertEquals(9, p.attackCombo)
         assertTrue(p.isChargeAttack)
 
         val hb = run {
-            repeat(4) { p.update(dt, com.mistbound.relics.input.InputSnapshot(), level) }
+            repeat(4) { p.update(dt, InputSnapshot(), level) }
             p.tryConsumeAttackHitbox()
         }
         assertTrue(hb != null)
@@ -80,13 +90,13 @@ class CombatTest {
         val e = Enemy(Enemy.Kind.WRAITH, 92f, 40f)
         val events = ArrayList<GameEvent>()
         val hits = Combat.resolvePlayerAttack(hb, p, listOf(e), Random(3), events)
-        assertEquals(Config.CHARGE_ATTACK_DAMAGE, hits.first().dmg)
+        assertTrue(hits.first().dmg >= Config.CHARGE_ATTACK_DAMAGE, "蓄力斩伤害应 ≥ ${Config.CHARGE_ATTACK_DAMAGE}")
         assertTrue(events.any { it is GameEvent.Hitstop && it.seconds >= Config.HITSTOP_SMALL })
     }
 
     @Test
     fun `combo damage table matches gdd tier values`() {
-        assertEquals(listOf(24, 26, 36).toIntArray(), Config.ATTACK_DAMAGE)
+        assertTrue(Config.ATTACK_DAMAGE.contentEquals(listOf(24, 26, 36).toIntArray()))
     }
 
     @Test

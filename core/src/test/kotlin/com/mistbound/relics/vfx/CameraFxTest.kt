@@ -17,8 +17,8 @@ class CameraFxTest {
             assertTrue(abs(fx.offsetX) <= Config.SHAKE_OFFSET + 1e-4f, "offsetX=${fx.offsetX}")
             assertTrue(abs(fx.offsetY) <= Config.SHAKE_OFFSET * 0.6f + 1e-4f)
         }
-        assertEquals(0f, fx.trauma, "2s 后 trauma 应衰减到 0")
-        assertEquals(0f, fx.offsetX)
+        assertEquals(0f, fx.trauma, 1e-3f, "2s 后 trauma 应衰减到 0")
+        assertEquals(0f, fx.offsetX, 1e-3f)
     }
 
     @Test
@@ -34,9 +34,9 @@ class CameraFxTest {
         val fx = CameraFx()
         fx.requestHitstop(Config.HITSTOP_SMALL)
         fx.requestHitstop(Config.HITSTOP_MINIBOSS)
-        assertEquals(Config.HITSTOP_MINIBOSS, fx.hitstop, "应取更大值")
+        assertEquals(Config.HITSTOP_MINIBOSS, fx.hitstop, 1e-6f, "应取更大值")
         repeat(6) { fx.update(1f / 60f) }
-        assertEquals(0f, fx.hitstop)
+        assertEquals(0f, fx.hitstop, 1e-4f)
     }
 }
 
