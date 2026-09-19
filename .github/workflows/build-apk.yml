@@ -49,13 +49,21 @@ jobs:
                       msg = (f.get('message') or 'test failed').replace('\n', ' ')[:400]
                       print(f"::error file={tc.get('classname')},title={tc.get('name')}::{msg}")
           if not found:
-              # 编译/配置失败：回传 gradle 日志尾部
+              # 编译/配置失败：抽取关键段落回传
               try:
-                  tail = open('/tmp/core-test.log', 'rb').read()[-5000:].decode('utf-8', 'replace')
+                  lines = open('/tmp/core-test.log', 'rb').read().decode('utf-8', 'replace').splitlines()
               except OSError:
-                  tail = '(no log captured)'
-              for line in tail.splitlines():
-                  line = line.strip()
+                  lines = ['(no log captured)']
+              out = []
+              grab = 0
+              for ln in lines:
+                  s = ln.strip()
+                  if any(k in s for k in ('FAILURE', 'What went wrong', 'Caused by', 'e: ', 'error:', 'Could not', 'Searched in', 'A problem occurred')):
+                      grab = 25
+                  if grab > 0:
+                      out.append(s)
+                      grab -= 1
+              for line in out[:80]:
                   if line:
                       print('::error::' + line[:300])
           EOF
