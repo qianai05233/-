@@ -6,21 +6,34 @@ import com.badlogic.gdx.audio.Sound
 import com.mistbound.relics.audio.AudioBus
 import com.mistbound.relics.audio.SfxId
 
-/** 音效库：启动加载全部 OGG（约 0.3MB），播放走对象池节流。 */
+/** 音效库：启动加载全部 OGG（约 0.3MB），播放走对象池节流。修复：缺失文件时跳过而非崩溃 */
 class SfxBank {
     private val sounds = HashMap<SfxId, Sound>(32)
 
     fun load() {
         if (sounds.isNotEmpty()) return
         for (id in SfxId.entries) {
-            sounds[id] = Gdx.audio.newSound(Gdx.files.internal("game/audio/sfx/${id.file}.ogg"))
+            val file = Gdx.files.internal("game/audio/sfx/${id.file}.ogg")
+            if (!file.exists()) {
+                Gdx.app.error("MistboundAudio", "SFX missing: ${file.path()}, skip")
+                continue
+            }
+            try {
+                sounds[id] = Gdx.audio.newSound(file)
+                Gdx.app.log("MistboundAudio", "SFX loaded: ${id.file}")
+            } catch (e: Exception) {
+                Gdx.app.error("MistboundAudio", "Failed to load SFX ${id.file}", e)
+            }
         }
+        Gdx.app.log("MistboundAudio", "SfxBank loaded ${sounds.size}/${SfxId.entries.size}")
     }
 
-    fun get(id: SfxId): Sound = sounds.getValue(id)
+    fun get(id: SfxId): Sound? = sounds[id]
 
     fun dispose() {
-        sounds.values.forEach { it.dispose() }
+        sounds.values.forEach {
+            try { it.dispose() } catch (e: Exception) { /* ignore */ }
+        }
         sounds.clear()
     }
 }
@@ -46,19 +59,42 @@ class GdxAudioBus(private val bank: SfxBank, private val layers: Int = 5) : Audi
         if (voices >= MAX_VOICES_PER_FRAME) return
         lastPlay[id] = clock
         voices++
-        bank.get(id).play(vol.coerceIn(0f, 1f), pitch.coerceIn(0.5f, 1.5f), pan.coerceIn(-1f, 1f))
+        try {
+            val sound = bank.get(id) ?: run {
+                Gdx.app.error("MistboundAudio", "SFX not loaded, skip play: $id")
+                return
+            }
+            sound.play(vol.coerceIn(0f, 1f), pitch.coerceIn(0.5f, 1.5f), pan.coerceIn(-1f, 1f))
+        } catch (e: Exception) {
+            Gdx.app.error("MistboundAudio", "Failed to play SFX $id", e)
+        }
     }
 
     override fun musicLayer(index: Int) {
         require(index in 0 until layers) { "BGM 层越界: $index" }
         layer = index
         if (musics[index] == null) {
-            musics[index] = Gdx.audio.newMusic(Gdx.files.internal("game/audio/music/fog_$index.ogg")).apply {
-                isLooping = true
-                volume = 0f
+            val file = Gdx.files.internal("game/audio/music/fog_$index.ogg")
+            if (!file.exists()) {
+                Gdx.app.error("MistboundAudio", "BGM missing: ${file.path()}")
+                return
+            }
+            try {
+                musics[index] = Gdx.audio.newMusic(file).apply {
+                    isLooping = true
+                    volume = 0f
+                }
+                Gdx.app.log("MistboundAudio", "BGM layer $index loaded")
+            } catch (e: Exception) {
+                Gdx.app.error("MistboundAudio", "Failed to load BGM $index", e)
+                return
             }
         }
-        if (musics[index]!!.isPlaying.not() && volumes[index] <= 0.01f) musics[index]!!.play()
+        try {
+            if (musics[index]!!.isPlaying.not() && volumes[index] <= 0.01f) musics[index]!!.play()
+        } catch (e: Exception) {
+            Gdx.app.error("MistboundAudio", "Failed to play BGM $index", e)
+        }
     }
 
     override fun update(dt: Float) {

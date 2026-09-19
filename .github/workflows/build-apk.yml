@@ -76,6 +76,31 @@ jobs:
         run: |
           ./gradlew :android:assembleDebug --no-daemon --stacktrace
 
+      - name: Verify APK contains game assets and native libs (prevent flash crash)
+        run: |
+          APK=android/build/outputs/apk/debug/android-debug.apk
+          echo "Listing APK contents..."
+          unzip -l "$APK" | grep -E "assets/game|lib/.*libgdx" || true
+          echo "--- check assets ---"
+          if ! unzip -l "$APK" | grep -q "assets/game/frames.json"; then
+            echo "::error::APK missing assets/game/frames.json - will flash crash! Check android/build.gradle.kts assets.srcDirs"
+            exit 1
+          fi
+          if ! unzip -l "$APK" | grep -q "assets/game/atlas/pack.json"; then
+            echo "::error::APK missing atlas"
+            exit 1
+          fi
+          if ! unzip -l "$APK" | grep -q "lib/"; then
+            echo "::error::APK missing native libs (lib/ folder empty)"
+            unzip -l "$APK" | tail -n 50
+            exit 1
+          fi
+          if ! unzip -l "$APK" | grep -q "libgdx.so"; then
+            echo "::error::APK missing libgdx.so - will crash with UnsatisfiedLinkError"
+            exit 1
+          fi
+          echo "APK verification passed"
+
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
