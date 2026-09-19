@@ -54,7 +54,7 @@ class PlayerPhysicsTest {
     }
 
     @Test
-    fun `coyote time expires after 0.08s`() {
+    fun `coyote time expires after 80ms`() {
         val p = landOnPlatform()
         var steps = 0
         while (p.onGround && steps < 240) {
@@ -98,7 +98,7 @@ class PlayerPhysicsTest {
     }
 
     @Test
-    fun `roll grants 0.30s iframes then expires`() {
+    fun `roll grants 300ms iframes then expires`() {
         val p = Player(60f, 40f)
         p.step(2, neutral)
         p.update(dt, InputSnapshot(rollPressed = true), floorOnly)
