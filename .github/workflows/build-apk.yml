@@ -14,6 +14,10 @@ concurrency:
   group: apk-${{ github.ref }}
   cancel-in-progress: true
 
+# Release 自动出包需要 GITHUB_TOKEN 具备写 Release 权限（默认只读会导致 403）
+permissions:
+  contents: write
+
 jobs:
   build-apk:
     runs-on: ubuntu-latest
