@@ -1,30 +1,45 @@
-# 素材目录 · 像素风横版 ARPG（暂定名：雾境遗章）
+# 素材目录 · 像素风横版肉鸽《雾境遗章》
 
-本目录存放游戏美术素材。视觉基准来自会话中附带的两张参考图（未入库）：
+视觉基准：`docs/reference/01_character_spec.md`（主角）、`docs/reference/02_scene_hud_spec.md`（场景/HUD）。
+原参考图补录位：`assets/reference/01_scene_moodboard.png`、`assets/reference/02_character_sheet.png`
+（本地拖入后 commit 即可，目录已建好）。
 
-- **参考图 1**：三场景氛围/HUD 情绪板（01 迷雾森林·遗迹之境 / 02 水晶深渊·永冻之谷 / 03 暗影城堡·深渊回廊）
-- **参考图 2**：主角像素素材规格表（三视图、武器、基础/战斗/魔法/特殊动作、特效、其他素材）
+## 帧表（行=动作序列，列=帧序；深色底 #0D1220，图内无文字）
+| 文件 | 内容 |
+| --- | --- |
+| `enemies_f1_wraith_flame_sheet.png` | F1：兜帽幽魂(待机/扑击/受击/消散+血条帧)；蓝焰怪(待机/冲刺/爆裂/熄灭) |
+| `enemies_f1_forest_extra_sheet.png` | F1 补充：腐木树人苗(4帧)；雾鸦(4帧) |
+| `enemies_f2_marsh_sheet.png` | F2：溺亡士兵(4帧)；沼泽水蛭(4帧) |
+| `enemies_f3_crystal_sheet.png` | F3：冰傀儡(4帧)；晶刺蛛(4帧) |
+| `enemies_f4_catacomb_sheet.png` | F4：骷髅兵(4帧)；烬蝠(4帧) |
+| `enemies_f5_castle_sheet.png` | F5：持盾骑士(4帧)；刺客暗影(4帧) |
+| `miniboss_f1_treant_elder_sheet.png` | 小Boss1 古树长者 6帧（震地/扫枝/召唤/硬直/死亡） |
+| `miniboss_f2_drowned_bishop_sheet.png` | 小Boss2 溺亡主教 6帧（水波/召地手/水遁/死亡） |
+| `miniboss_f3_frost_king_sheet.png` | 小Boss3 棱晶霜王 6帧（冰环/冰锥阵/冲撞/碎裂） |
+| `miniboss_f4_forged_skeleton_king_sheet.png` | 小Boss4 锻骸骷王 6帧（熔岩锤击/投熔珠/火柱环/灰灭） |
+| `miniboss_f5_abyss_knight_sheet.png` | 小Boss5 深渊骑士 6帧（斩击剑气/召唤法阵/硬直/跪亡） |
+| `finalboss_deep_sovereign_sheet.png` | 大Boss 深渊之主：P1 王体 5帧 + P2 巨大灵体 4帧 |
+| `protagonist_extras_sheet.png` | ⏳ 下轮生成：翻滚残影/胜利/死亡/祭坛互动/觉醒形态 |
 
-## 文件清单
+## 场景
+| 文件 | 内容 |
+| --- | --- |
+| `scene_f2_moonfall_marsh.png` | 第2层 月落沼泽·沉没圣所（方形构图，16:9 待补） |
+| `scene_f4_catacomb_forge.png` | ⏳ 下轮生成：第4层 沉眠墓穴·烬火锻炉 |
+| `scene_final_arena_throne.png` | ⏳ 下轮生成：最终决战 深渊王座 |
+| （F1/F3/F5 宽幅单场景） | ⏳ 按需补：目前仅存于参考图 1 三格 |
 
-| 文件 | 内容 | 帧/元素说明 |
-| --- | --- | --- |
-| `enemy_sprite_sheet.png` | 小怪帧表（第1层敌人） | 行1 兜帽幽魂：浮空待机（含红色血条）→ 扑击 → 受击 → 消散死亡；行2 蓝色火焰怪：待机 → 冲刺 → 爆裂 → 熄灭死亡 |
-| `boss_sprite_sheet.png` | Boss 帧表（第5层 深渊骑士） | 待机 A/B → 巨剑斩击（青色月牙剑气）→ 召唤（脚下魔法阵）→ 受击硬直 → 跪地死亡消散 |
-| `scene_floor2_moonfall_marsh.png` | 第2层场景概念「月落沼泽·沉没圣所」 | 森林→水晶深渊的过渡关：满月、镜面水面倒影、沉没石拱遗迹、青色沼火、可跳苔石平台；当前为方形构图，16:9 横版宽幅待补 |
+## UI / 道具 / 特效
+| 文件 | 内容 |
+| --- | --- |
+| `ui_hud_kit.png` | ⏳ 下轮生成：血条/能量水晶/菱形技能槽/Boss条/小地图框/摇杆与按键 |
+| `props_items_sheet.png` | ⏳ 下轮生成：宝箱/药水/水晶/金币/蓝图/五武器拾取/门/传送门 |
+| `effects_vfx_sheet.png` | ⏳ 下轮生成：剑气/命中星芒/法阵/脚光/残影/红蓝粒子/传送漩涡/光柱 |
 
-## 风格规范（后续素材须遵守）
+## 风格规范（新增素材必须遵守）
+底色 `#0D1220`；靛紫 `#6C5CA8/#8F7FD4`；光效青蓝 `#7FD4FF/#4AA3FF`；敌对红 `#E0405A`；
+月光白 `#F2F6FF`。小怪/主角二头身，Boss 四头身；统一冷蓝轮廓光；帧表等距网格、无文字标注。
 
-- **配色**：底色 `#0D1220`；主色靛紫 `#6C5CA8` / `#8F7FD4`；光效青蓝 `#7FD4FF` / `#4AA3FF`；敌对/受伤点缀红 `#E0405A`；月光白 `#F2F6FF`
-- **比例**：主角与小怪为二头身 Q 版；Boss 约四头身以保留压迫感
-- **光效**：统一冷蓝轮廓光（rim light）；技能/魔法光效使用高饱和青色，死亡消散用粒子碎屑
-- **帧表排版**：深色纯底、等距网格、行=角色/动作组、列=帧序；图内不放文字标注（标注以本文件为准）
-
-## 待补素材（TODO）
-
-- [ ] 第4层场景概念（水晶深渊 → 暗影城堡过渡，如「地下墓穴·烬火锻炉」）
-- [ ] `scene_floor2` 的 16:9 横版宽幅版（含平台层与视差分层）
-- [ ] HUD/UI 套件：血条、能量水晶槽、菱形技能槽（Q/E/锁定）、小地图框、任务目标列表
-- [ ] 道具高清帧表：宝箱、药水、金币、卷轴、水晶（参考图2「其他素材」行重绘）
-- [ ] 主角补充帧：召唤兽骑乘、胜利结算姿势
-- [ ] 精英怪帧表（第3层冰傀儡、第5层持盾骑士）
+## 引擎侧约定
+所有帧表由 `core/.../frames.json` 描述 bbox/fps/pivot（下一窗口 P1 校准）；
+禁止运行时散图加载，统一 TexturePacker atlas（见 docs/ENGINEERING.md §4）。
