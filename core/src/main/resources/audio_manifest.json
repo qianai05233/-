@@ -1,0 +1,144 @@
+{
+ "sfx": [
+  {
+   "file": "ui_click.ogg",
+   "duration": 0.05,
+   "bytes": 4118,
+   "sr": 44100
+  },
+  {
+   "file": "ui_confirm.ogg",
+   "duration": 0.15,
+   "bytes": 4376,
+   "sr": 44100
+  },
+  {
+   "file": "jump.ogg",
+   "duration": 0.13,
+   "bytes": 4949,
+   "sr": 44100
+  },
+  {
+   "file": "roll.ogg",
+   "duration": 0.17,
+   "bytes": 5531,
+   "sr": 44100
+  },
+  {
+   "file": "slash_1.ogg",
+   "duration": 0.09,
+   "bytes": 4715,
+   "sr": 44100
+  },
+  {
+   "file": "slash_2.ogg",
+   "duration": 0.09,
+   "bytes": 4696,
+   "sr": 44100
+  },
+  {
+   "file": "slash_3.ogg",
+   "duration": 0.13,
+   "bytes": 5113,
+   "sr": 44100
+  },
+  {
+   "file": "charge_ready.ogg",
+   "duration": 0.22,
+   "bytes": 4223,
+   "sr": 44100
+  },
+  {
+   "file": "charge_release.ogg",
+   "duration": 0.19,
+   "bytes": 5727,
+   "sr": 44100
+  },
+  {
+   "file": "hit_1.ogg",
+   "duration": 0.08,
+   "bytes": 4623,
+   "sr": 44100
+  },
+  {
+   "file": "hit_2.ogg",
+   "duration": 0.09,
+   "bytes": 4639,
+   "sr": 44100
+  },
+  {
+   "file": "hit_crit.ogg",
+   "duration": 0.16,
+   "bytes": 5285,
+   "sr": 44100
+  },
+  {
+   "file": "enemy_hit.ogg",
+   "duration": 0.07,
+   "bytes": 4626,
+   "sr": 44100
+  },
+  {
+   "file": "hurt.ogg",
+   "duration": 0.15,
+   "bytes": 4407,
+   "sr": 44100
+  },
+  {
+   "file": "die_hero.ogg",
+   "duration": 0.7,
+   "bytes": 9865,
+   "sr": 44100
+  },
+  {
+   "file": "enemy_die.ogg",
+   "duration": 0.35,
+   "bytes": 7169,
+   "sr": 44100
+  },
+  {
+   "file": "pickup.ogg",
+   "duration": 0.21,
+   "bytes": 4744,
+   "sr": 44100
+  },
+  {
+   "file": "portal.ogg",
+   "duration": 0.9,
+   "bytes": 12040,
+   "sr": 44100
+  }
+ ],
+ "music": [
+  {
+   "file": "fog_0.ogg",
+   "duration": 8.727,
+   "bytes": 19619,
+   "sr": 44100
+  },
+  {
+   "file": "fog_1.ogg",
+   "duration": 8.727,
+   "bytes": 33489,
+   "sr": 44100
+  },
+  {
+   "file": "fog_2.ogg",
+   "duration": 8.727,
+   "bytes": 88245,
+   "sr": 44100
+  },
+  {
+   "file": "fog_3.ogg",
+   "duration": 8.727,
+   "bytes": 96888,
+   "sr": 44100
+  },
+  {
+   "file": "fog_4.ogg",
+   "duration": 8.727,
+   "bytes": 94920,
+   "sr": 44100
+  }
+ ]
+}

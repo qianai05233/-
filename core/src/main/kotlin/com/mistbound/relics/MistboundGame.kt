@@ -7,4 +7,8 @@ class MistboundGame : Game() {
     override fun create() {
         setScreen(GameScreen())
     }
+
+    override fun dispose() {
+        screen?.dispose()
+    }
 }

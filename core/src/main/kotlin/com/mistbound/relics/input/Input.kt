@@ -10,6 +10,8 @@ data class InputSnapshot(
     val jumpPressed: Boolean = false,
     val rollPressed: Boolean = false,
     val attackPressed: Boolean = false,
+    val attackHeld: Boolean = false,
+    val attackReleased: Boolean = false,
     val skillQPressed: Boolean = false,
     val skillEPressed: Boolean = false,
 )

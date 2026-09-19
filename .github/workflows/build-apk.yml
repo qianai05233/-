@@ -79,6 +79,67 @@ jobs:
           path: android/build/outputs/apk/debug/android-debug.apk
           if-no-files-found: error
 
+      # ==== Release 自动出包（P1 追加；不改动以上步骤）====
+      # 解决"搜不到 release / artifacts 404"：push main 构建成功后自动创建/更新
+      # GitHub Release（APK V2/V3/...），Release 页为用户唯一取包入口。
+      - name: Collect acceptance report
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python3 - <<'EOF'
+          import glob, re, xml.etree.ElementTree as ET, os
+          tests = fails = 0
+          headroom = 'n/a'
+          for p in glob.glob('core/build/test-results/test/*.xml'):
+              r = ET.parse(p).getroot()
+              tests += int(r.get('tests', 0)); fails += int(r.get('failures', 0)) + int(r.get('errors', 0))
+              text = ''.join(e.text or '' for e in r.iter('system-out'))
+              m = re.search(r'headroom (\d+)x', text)
+              if m: headroom = f"{m.group(1)}x"
+          apk = 'android/build/outputs/apk/debug/android-debug.apk'
+          size = os.path.getsize(apk)
+          ver = open('RELEASE_VERSION').read().strip()
+          report = f"""《雾境遗章》APK {ver} 验收报告
+          - APK 大小: {size/1048576:.2f} MB（硬指标 ≤ 25MB）
+          - 单测: {tests} 个用例，{fails} 失败（必须全绿）
+          - 60Hz 逻辑冗余: {headroom}（要求 ≥ 10x，真机帧率看 logcat tag=MistboundFPS）
+          - commit: {os.environ.get('GITHUB_SHA','local')}
+          - 构建: {os.environ.get('GITHUB_SERVER_URL','')}/{os.environ.get('GITHUB_REPOSITORY','')}/actions/runs/{os.environ.get('GITHUB_RUN_ID','')}
+          """
+          open('build_report.txt', 'w').write('\n'.join(l.strip() for l in report.splitlines()) + '\n')
+          print(open('build_report.txt').read())
+          if fails or size > 25 * 1048576:
+              raise SystemExit('验收不过关: tests failed or apk > 25MB')
+          EOF
+
+      - name: Publish GitHub Release (用户取包唯一入口)
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          V=$(tr -d '[:space:]' < RELEASE_VERSION)
+          {
+            echo "## 《雾境遗章》APK ${V}"
+            echo
+            echo "### 本阶段内容"
+            cat docs/RELEASE_NOTES.md
+            echo
+            echo "### 验收数据"
+            cat build_report.txt
+            echo
+            echo "### 安装"
+            echo "下载下方 \`android-debug.apk\`（或 \`app-debug.apk\`）直接安装即可；Release 页为唯一取包入口。"
+            echo
+            echo "构建: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          } > release_body.md
+          gh release delete "apk-${V}" --yes --cleanup-tag 2>/dev/null || true
+          gh release create "apk-${V}" \
+            --title "APK ${V}" \
+            --notes-file release_body.md \
+            --target main \
+            android/build/outputs/apk/debug/android-debug.apk \
+            build_report.txt
+          echo "Release apk-${V} 已发布"
+
       # ---- Release（可选）：在仓库 Secrets 配置以下四项后启用 ----
       # KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD
       # - name: Build signed release APK

@@ -39,4 +39,33 @@ object Config {
     const val HP_F3 = 160
     const val HP_F5 = 210
     const val CRIT_MULTIPLIER = 1.75f
+
+    // ---- P1 战斗（GDD 2）----
+    const val COMBO_WINDOW = 0.35f        // 连击维持窗口
+    const val CHARGE_TIME = 0.35f         // 蓄力就绪时间
+    const val CHARGE_MULT = 2.2f          // 蓄力伤害倍率
+    const val HURT_STUN = 0.18f           // 受击硬直
+    const val HURT_IFRAMES = 0.5f         // 受击后无敌
+    const val CRIT_CHANCE = 0.15f         // 暴击率
+    const val ATTACK_LUNGE = 40f          // 攻击前移速度
+    const val PLAYER_MAX_HP = HP_F1
+
+    // 攻击三段：前摇/ active / 后摇（秒）与伤害（飘字中值 -32 tier，GDD 8）
+    val ATTACK_STARTUP = floatArrayOf(0.08f, 0.07f, 0.10f)
+    val ATTACK_ACTIVE = floatArrayOf(0.10f, 0.10f, 0.12f)
+    val ATTACK_RECOVERY = floatArrayOf(0.10f, 0.10f, 0.16f)
+    val ATTACK_DAMAGE = intArrayOf(24, 26, 36)
+    const val CHARGE_ATTACK_DAMAGE = 58   // 24 × 2.2 ≈ 53，取 58（蓄力满档）
+
+    // 屏震 / hitstop 落点由命中目标分级（HITSTOP_*，上方）
+    const val SHAKE_DECAY = 1.8f
+    const val SHAKE_OFFSET = 6f
+
+    // 飘字
+    const val DMG_NUMBER_LIFE = 0.7f
+    const val DMG_NUMBER_RISE = 34f
+
+    // 敌人（F1 占位层）
+    const val ENEMY_CONTACT_DMG = 8
+    const val ENEMY_LUNGE_DMG = 14
 }
