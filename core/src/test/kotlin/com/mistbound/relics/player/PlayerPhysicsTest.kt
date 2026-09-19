@@ -47,8 +47,8 @@ class PlayerPhysicsTest {
             steps++
         }
         assertTrue(!p.onGround, "player should have left the platform")
-        // 离地 4 步 (~0.067s < 0.08s) 后起跳，应成功
-        p.step(4, neutral, platformLevel)
+        // 离地 3 步 + 起跳步 = 4 步 (~0.067s < 0.08s) 后起跳，应成功
+        p.step(3, neutral, platformLevel)
         p.update(dt, InputSnapshot(jumpPressed = true, jumpHeld = true), platformLevel)
         assertTrue(p.vy > 0f, "coyote jump should fire, vy=${p.vy}")
     }
