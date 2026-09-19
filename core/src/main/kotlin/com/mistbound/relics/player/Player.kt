@@ -420,6 +420,16 @@ class Player(
                 vy = 0f
             }
         }
+        // 贴地探测：重力未推进的帧（如蓄力起手）站在表面时保持接地判定
+        if (!onGround && vy <= 0f) {
+            for (s in level.solids) {
+                val top = s.y + s.h
+                if (top <= y + 0.01f && y - top <= 0.6f && x < s.x + s.w && x + width > s.x) {
+                    onGround = true
+                    break
+                }
+            }
+        }
     }
 
     private fun overlaps(s: Solid): Boolean =

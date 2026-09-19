@@ -21,7 +21,7 @@ class EnemyAiTest {
         repeat(60) { e.update(dt, far, level) }
         assertEquals(Enemy.State.IDLE, e.state, "玩家距离 300 > 160 应保持待机")
 
-        val near = Player(380f, 40f)
+        val near = Player(445f, 40f) // 在敌人右侧：已仇恨、未到扑击距离
         e.update(dt, near, level)
         assertEquals(Enemy.State.CHASE, e.state)
         val x0 = e.x
@@ -31,7 +31,7 @@ class EnemyAiTest {
 
     @Test
     fun `windup then lunge then recover`() {
-        val e = Enemy(Enemy.Kind.WRAITH, 100f, 60f)
+        val e = Enemy(Enemy.Kind.WRAITH, 100f, 46f)
         val p = Player(104f, 40f)
         // 进入 STRIKE_RANGE 后前摇
         repeat(10) { e.update(dt, p, level) }
