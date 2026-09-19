@@ -26,8 +26,8 @@ class Assets {
 
     fun load() {
         if (loaded) return
-        // frames.json：core 模块资源（classpath）
-        val framesJson = JsonReader().parse(Gdx.files.classpath("frames.json").readString())
+        // frames.json：随 Android assets 打包，避免 Android 运行时 classpath 不可用
+        val framesJson = JsonReader().parse(Gdx.files.internal("game/frames.json").readString())
         val anims = HashMap<String, Anim>()
         val animsV = framesJson.get("anims")
         var a = animsV.child
