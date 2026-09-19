@@ -2,7 +2,7 @@
 
 视觉基准：`docs/reference/01_character_spec.md`（主角）、`docs/reference/02_scene_hud_spec.md`（场景/HUD）。
 原参考图补录位：`assets/reference/01_scene_moodboard.png`、`assets/reference/02_character_sheet.png`
-（本地拖入后 commit 即可，目录已建好）。
+（本地拖入后 commit 即可，目录已建好；转录文档已含全部信息）。
 
 ## 帧表（行=动作序列，列=帧序；深色底 #0D1220，图内无文字）
 | 文件 | 内容 |
@@ -19,22 +19,22 @@
 | `miniboss_f4_forged_skeleton_king_sheet.png` | 小Boss4 锻骸骷王 6帧（熔岩锤击/投熔珠/火柱环/灰灭） |
 | `miniboss_f5_abyss_knight_sheet.png` | 小Boss5 深渊骑士 6帧（斩击剑气/召唤法阵/硬直/跪亡） |
 | `finalboss_deep_sovereign_sheet.png` | 大Boss 深渊之主：P1 王体 5帧 + P2 巨大灵体 4帧 |
-| `protagonist_extras_sheet.png` | ⏳ 下轮生成：翻滚残影/胜利/死亡/祭坛互动/觉醒形态 |
+| `protagonist_extras_sheet.png` | 主角补帧：翻滚残影/胜利/死亡/祭坛互动/觉醒形态 |
 
 ## 场景
 | 文件 | 内容 |
 | --- | --- |
 | `scene_f2_moonfall_marsh.png` | 第2层 月落沼泽·沉没圣所（方形构图，16:9 待补） |
-| `scene_f4_catacomb_forge.png` | ⏳ 下轮生成：第4层 沉眠墓穴·烬火锻炉 |
-| `scene_final_arena_throne.png` | ⏳ 下轮生成：最终决战 深渊王座 |
-| （F1/F3/F5 宽幅单场景） | ⏳ 按需补：目前仅存于参考图 1 三格 |
+| `scene_f4_catacomb_forge.png` | 第4层 沉眠墓穴·烬火锻炉（16:9 宽幅） |
+| `scene_final_arena_throne.png` | 最终决战 深渊王座（16:9 宽幅） |
+| （F1/F3/F5 宽幅单场景） | 按需补：目前仅存于参考图 1 三格 |
 
 ## UI / 道具 / 特效
 | 文件 | 内容 |
 | --- | --- |
-| `ui_hud_kit.png` | ⏳ 下轮生成：血条/能量水晶/菱形技能槽/Boss条/小地图框/摇杆与按键 |
-| `props_items_sheet.png` | ⏳ 下轮生成：宝箱/药水/水晶/金币/蓝图/五武器拾取/门/传送门 |
-| `effects_vfx_sheet.png` | ⏳ 下轮生成：剑气/命中星芒/法阵/脚光/残影/红蓝粒子/传送漩涡/光柱 |
+| `ui_hud_kit.png` | 血条/能量水晶/菱形技能槽(含锁定)/Boss条/小地图框/目标菱形/摇杆与五键/飘字数字样式 |
+| `props_items_sheet.png` | 宝箱开合/血瓶/雾晶/金币/蓝图卷轴/五武器拾取座/门/传送门(层间roguelite过渡) |
+| `effects_vfx_sheet.png` | 剑气三档/命中星芒/法阵/脚光/残影拖尾/红血粒子/蓝晶粒子/传送漩涡/光柱/闪白/毒滴/烬火星 |
 
 ## 风格规范（新增素材必须遵守）
 底色 `#0D1220`；靛紫 `#6C5CA8/#8F7FD4`；光效青蓝 `#7FD4FF/#4AA3FF`；敌对红 `#E0405A`；
