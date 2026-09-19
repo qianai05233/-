@@ -24,7 +24,7 @@ class PlayerCombatTest {
     fun `attack starts and advances through phases`() {
         val p = Player(60f, 40f)
         p.update(dt, InputSnapshot(attackPressed = true), floor)
-        assertEquals(State.ATTACK, p.state)
+        assertEquals(Player.State.ATTACK, p.state)
         assertEquals(0, p.attackCombo)
         tap(p, 4) // 0.067s < 前摇 0.08
         assertEquals(null, p.tryConsumeAttackHitbox(), "前摇期内无命中盒")
@@ -38,10 +38,10 @@ class PlayerCombatTest {
         p.update(dt, InputSnapshot(attackPressed = true), floor)
         tap(p, 11) // 0.183s：进入收招段（0.18 后）
         p.update(dt, InputSnapshot(attackPressed = true), floor) // 缓冲下一击
-        assertEquals(true, p.state == State.ATTACK)
+        assertEquals(true, p.state == Player.State.ATTACK)
         tap(p, 10) // 攻击结束（0.28s+）→ 连段 2
         assertEquals(1, p.attackCombo, "收招中按攻击应接第二段")
-        assertEquals(State.ATTACK, p.state)
+        assertEquals(Player.State.ATTACK, p.state)
     }
 
     @Test
@@ -52,7 +52,7 @@ class PlayerCombatTest {
         p.onAttackConfirmed()
         // 命中后 0.15s 内可取消入翻滚
         p.update(dt, InputSnapshot(rollPressed = true), floor)
-        assertEquals(State.ROLLING, p.state, "命中后应可取消入翻滚")
+        assertEquals(Player.State.ROLLING, p.state, "命中后应可取消入翻滚")
     }
 
     @Test
@@ -61,7 +61,7 @@ class PlayerCombatTest {
         p.update(dt, InputSnapshot(attackPressed = true), floor)
         tap(p, 2) // 前摇早期，cancelWindow 未开启
         p.update(dt, InputSnapshot(rollPressed = true), floor)
-        assertEquals(State.ATTACK, p.state, "前摇不可取消（GDD 2）")
+        assertEquals(Player.State.ATTACK, p.state, "前摇不可取消（GDD 2）")
     }
 
     @Test
@@ -69,14 +69,14 @@ class PlayerCombatTest {
         val p = Player(60f, 40f)
         p.update(dt, InputSnapshot(attackPressed = true, attackHeld = true), floor)
         tap(p, 12, InputSnapshot(attackHeld = true)) // 进入收招
-        assertEquals(State.CHARGE, p.state)
+        assertEquals(Player.State.CHARGE, p.state)
         assertFalse(p.chargeReady)
         tap(p, 20, InputSnapshot(attackHeld = true)) // ~0.33s
         p.update(dt, InputSnapshot(attackHeld = true), floor) // ≥0.35s
         assertTrue(p.chargeReady, "0.35s 蓄力就绪")
         p.update(dt, InputSnapshot(attackReleased = true), floor)
         assertEquals(9, p.attackCombo, "放开应触发蓄力斩")
-        assertEquals(State.ATTACK, p.state)
+        assertEquals(Player.State.ATTACK, p.state)
     }
 
     @Test
@@ -84,9 +84,9 @@ class PlayerCombatTest {
         val p = Player(60f, 40f)
         p.update(dt, InputSnapshot(attackPressed = true, attackHeld = true), floor)
         tap(p, 12, InputSnapshot(attackHeld = true))
-        assertEquals(State.CHARGE, p.state)
+        assertEquals(Player.State.CHARGE, p.state)
         p.update(dt, InputSnapshot(rollPressed = true), floor)
-        assertEquals(State.ROLLING, p.state, "翻滚应可取消蓄力")
+        assertEquals(Player.State.ROLLING, p.state, "翻滚应可取消蓄力")
     }
 
     @Test
@@ -96,7 +96,7 @@ class PlayerCombatTest {
         val hpBefore = p.hp
         assertTrue(p.hurt(20, fromX = p.cx + 40f))
         assertEquals(hpBefore - 20, p.hp)
-        assertEquals(State.HURT, p.state)
+        assertEquals(Player.State.HURT, p.state)
         assertTrue(p.vx < 0f, "应向远离伤害源方向击退")
         assertEquals(Config.HURT_IFRAMES, p.hurtIframe)
         // 硬直期间不吃输入移动（击退被摩擦衰减，而非被输入加速）
@@ -113,12 +113,12 @@ class PlayerCombatTest {
         p.update(dt, InputSnapshot(), floor)
         assertTrue(p.hurt(9999, fromX = p.cx + 10f))
         assertTrue(p.dead)
-        assertEquals(State.DEAD, p.state)
+        assertEquals(Player.State.DEAD, p.state)
         assertEquals(0, p.hp)
         p.respawn()
         assertEquals(p.maxHp, p.hp)
         assertFalse(p.dead)
-        assertEquals(State.IDLE, p.state)
+        assertEquals(Player.State.IDLE, p.state)
     }
 
     @Test
