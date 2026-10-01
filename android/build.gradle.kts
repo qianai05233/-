@@ -142,3 +142,5 @@ tasks.preBuild {
 tasks.matching { name.contains("merge") && name.contains("JniLibFolders") }.configureEach {
     dependsOn(copyNatives)
 }
+
+// probe: verify push triggers CI (2026-10-01)
