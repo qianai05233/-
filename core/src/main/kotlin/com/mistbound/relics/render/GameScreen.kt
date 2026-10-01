@@ -69,14 +69,35 @@ class GameScreen : Screen {
     }
 
     override fun show() {
+        Gdx.app.log("GameScreen", "show() start")
         Gdx.input.inputProcessor = controls
         font.data.setScale(0.5f)
         hudCamera.setToOrtho(false, Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT)
         hudCamera.update()
-        assets.load()
-        sfxBank.load()
-        audio.musicLayer(0)
+
+        try {
+            assets.load()
+            Gdx.app.log("GameScreen", "assets loaded")
+        } catch (e: Exception) {
+            Gdx.app.error("GameScreen", "assets.load() failed - will crash without assets", e)
+            throw e
+        }
+
+        try {
+            sfxBank.load()
+            Gdx.app.log("GameScreen", "sfxBank loaded")
+        } catch (e: Exception) {
+            Gdx.app.error("GameScreen", "sfxBank.load() failed, continue without sfx", e)
+        }
+
+        try {
+            audio.musicLayer(0)
+        } catch (e: Exception) {
+            Gdx.app.error("GameScreen", "musicLayer failed", e)
+        }
+
         if (enemies.isEmpty()) spawnWave(first = true)
+        Gdx.app.log("GameScreen", "show() done, enemies=${enemies.size}")
     }
 
     // ---------------------------------------------------------------- 模拟
