@@ -199,6 +199,43 @@
     1.0
    ]
   },
+  "flame_idle": {
+   "sheet": "wraith",
+   "frames": [
+    "wraith_flame_idle_0",
+    "wraith_flame_idle_1"
+   ],
+   "fps": 7,
+   "loop": true,
+   "pivot": [
+    0.438,
+    1.0
+   ]
+  },
+  "flame_burst": {
+   "sheet": "wraith",
+   "frames": [
+    "wraith_flame_burst_0"
+   ],
+   "fps": 8,
+   "loop": false,
+   "pivot": [
+    0.41,
+    1.0
+   ]
+  },
+  "flame_die": {
+   "sheet": "wraith",
+   "frames": [
+    "wraith_flame_die_0"
+   ],
+   "fps": 8,
+   "loop": false,
+   "pivot": [
+    0.589,
+    1.0
+   ]
+  },
   "vfx_slash_s": {
    "sheet": "vfx",
    "frames": [

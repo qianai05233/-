@@ -2,6 +2,8 @@ package com.mistbound.relics.assets
 
 import com.badlogic.gdx.utils.JsonReader
 import com.mistbound.relics.Config
+import com.mistbound.relics.enemy.Enemy
+import com.mistbound.relics.player.Player
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -126,5 +128,50 @@ class FramesManifestTest {
         val idle = manifest().anim("hero_idle")
         val i = idle.frameIndex(idle.duration * 3f + 0.01f)
         assertTrue(i in idle.frames.indices, "循环动画应取模")
+    }
+
+    /**
+     * 契约回归（V3 启动闪退）：Enemy 状态机每个分支可能产生的动画 id，
+     * 必须都存在于 frames.json —— 否则真机首帧绘制即 IllegalStateException 闪退。
+     */
+    @Test
+    fun `every anim id reachable from enemy state machine exists in manifest`() {
+        val m = manifest()
+        val level = com.mistbound.relics.world.Level.placeholder()
+        val dt = Config.FIXED_DT
+        for (kind in Enemy.Kind.entries) {
+            val seen = LinkedHashSet<String>()
+
+            // IDLE（默认）→ CHASE（进仇恨范围）
+            val e1 = Enemy(kind, 400f, 60f)
+            val far = Player(100f, 40f)
+            repeat(60) { e1.update(dt, far, level) }
+            seen.add(e1.animId())
+            e1.update(dt, Player(445f, 40f), level)
+            seen.add(e1.animId())
+
+            // WINDUP → LUNGE → RECOVER（近身引战，序列同 EnemyAiTest）
+            val e2 = Enemy(kind, 100f, 46f)
+            val p = Player(104f, 40f)
+            repeat(10) { e2.update(dt, p, level) }
+            seen.add(e2.animId())
+            repeat(16) { e2.update(dt, p, level) }
+            seen.add(e2.animId())
+            repeat(20) { e2.update(dt, p, level) }
+            seen.add(e2.animId())
+
+            // HURT → DIE → GONE（致死伤害必结算，序列同 EnemyAiTest）
+            val e3 = Enemy(kind, 100f, 60f)
+            assertTrue(e3.hurt(10, crit = false, fromX = 110f))
+            seen.add(e3.animId())
+            assertTrue(e3.hurt(999, crit = true, fromX = 110f))
+            seen.add(e3.animId())
+            repeat(30) { e3.update(dt, p, level) }
+            seen.add(e3.animId())
+
+            for (id in seen) {
+                assertTrue(m.anims.containsKey(id), "$kind 可产生的动画 id 不在 frames.json: $id")
+            }
+        }
     }
 }
