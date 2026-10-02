@@ -2,6 +2,18 @@
 
 本文件遵循 ENGINEERING §8：每个 PR 更新。格式：阶段 → 版本 → 内容。
 
+## [0.2.3-p1-fix] APK V3.1 — 蓝焰怪动画缺失启动闪退热修（真机 logcat 实证）
+
+- 根因：`Enemy.Kind.FLAME` 状态机请求 `flame_idle/flame_burst/flame_die`（Enemy.kt），
+  但 `tools/pipeline/sheet_defs.json` 的 anims 段仅登记 21 条、漏了这三条 →
+  `frames.json` 缺项 → 启动首帧 `GameScreen.drawEnemies` → `FramesManifest.anim` 抛
+  `IllegalStateException`（`logcat -b crash` 三次连崩实锤；图集区域与源素材其实早已就位）。
+- 数据修复：anims 补 3 条并重跑 `sprite_pipeline.py`（21 → 24 动画）；图集 `pack.json` 零变化（布局确定性）。
+- 管线加固：`sprite_pipeline.py` 改为 `core/src/main/resources/frames.json` +
+  `android/assets/game/frames.json` 双写，杜绝手抄同步漂移。
+- 回归：新增契约测试，遍历 Enemy 全部可达状态的 `animId()` 输出并断言清单存在（CI 拦截同类缺项）。
+- versionCode 5 / versionName 0.2.3-p1-fix / Release apk-V3.1（不占用阶段计划中 P3=APK V4 的标签）。
+
 ## [0.2.1-p1] APK V2 — Android 启动闪退热修
 
 - 修复 Android 运行时使用 `Gdx.files.classpath("frames.json")` 无法读取动画清单导致的启动闪退。

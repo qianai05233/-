@@ -7,7 +7,7 @@
     → 主连通域求 pivot(脚底中心)
     → shelf 装箱(页≤2048, padding2) → 每页中位切分量化(palette≤64)
     → android/assets/game/atlas/page-N.png + pack.json
-    → core/src/main/resources/frames.json (动画=帧序列+fps+loop+pivot)
+    → core/src/main/resources/frames.json + android/assets/game/frames.json 双写(动画=帧序列+fps+loop+pivot)
     → 预览条/GIF(tools/pipeline/preview/)
 确定性输出：同输入同输出。CI 不运行本管线（产物已入库）。
 """
@@ -20,6 +20,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 ASSETS = os.path.join(ROOT, 'assets')
 OUT_ATLAS = os.path.join(ROOT, 'android', 'assets', 'game', 'atlas')
 OUT_FRAMES = os.path.join(ROOT, 'core', 'src', 'main', 'resources', 'frames.json')
+# 运行时实际加载的是 android assets 下这份；必须与 core resources 同步（否则 APK 用到旧清单）
+OUT_FRAMES_ANDROID = os.path.join(ROOT, 'android', 'assets', 'game', 'frames.json')
 OUT_PREVIEW = os.path.join(ROOT, 'tools', 'pipeline', 'preview')
 
 PAGE_MAX = 2048
@@ -283,9 +285,12 @@ def build():
                     'atlasManifest': 'game/atlas/pack.json',
                     'note': '由 tools/pipeline/sprite_pipeline.py 生成 + sheet_defs.json 人工校准'},
            'anims': anims}
+    frames_json = json.dumps(doc, ensure_ascii=False, indent=1)
     with open(OUT_FRAMES, 'w', encoding='utf-8') as f:
-        json.dump(doc, f, ensure_ascii=False, indent=1)
-    print(f"[frames.json] anims={len(anims)}")
+        f.write(frames_json)
+    with open(OUT_FRAMES_ANDROID, 'w', encoding='utf-8') as f:
+        f.write(frames_json)
+    print(f"[frames.json] anims={len(anims)} (core + android 双写)")
 
     # ---------- 预览条 ----------
     def strip(frame_names, out, scale=2):

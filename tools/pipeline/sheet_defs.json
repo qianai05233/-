@@ -497,6 +497,27 @@
       "fps": 8,
       "loop": false
     },
+    "flame_idle": {
+      "sheet": "wraith",
+      "row": "flame_idle",
+      "pick": "all",
+      "fps": 7,
+      "loop": true
+    },
+    "flame_burst": {
+      "sheet": "wraith",
+      "row": "flame_burst",
+      "pick": "all",
+      "fps": 8,
+      "loop": false
+    },
+    "flame_die": {
+      "sheet": "wraith",
+      "row": "flame_die",
+      "pick": "all",
+      "fps": 8,
+      "loop": false
+    },
     "vfx_slash_s": {
       "sheet": "vfx",
       "sub": "slash_s",
